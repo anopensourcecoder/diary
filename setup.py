@@ -3,6 +3,21 @@
 """The setup script."""
 
 from setuptools import setup, find_packages
+import codecs
+import os.path
+
+def read(rel_path):
+    here = os.path.abspath(os.path.dirname(__file__))
+    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
+        return fp.read()
+
+def get_version(rel_path):
+    for line in read(rel_path).splitlines():
+        if line.startswith('__version__'):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+    else:
+        raise RuntimeError("Unable to find version string.")
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -34,8 +49,12 @@ setup(
     description="Record daily experiences and see the difference!",
     entry_points={
         'console_scripts': [
-            'diary=diary.cli:main',
+            'diary-cli=diary.cli:main',
+
         ],
+        'gui_scripts': [
+            'diary-gui=diary.gui:main',
+        ]
     },
     install_requires=requirements,
     license="GNU General Public License v3",
@@ -48,6 +67,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/anopensourcecoder/diary',
-    version='1.0.0',
+    version=get_version("diary/__init__.py"),
     zip_safe=False,
 )
