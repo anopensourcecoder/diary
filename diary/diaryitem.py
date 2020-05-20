@@ -4,6 +4,7 @@
 import os.path
 import sys
 from diary import db
+from diary.humandate import HumanDate
 
 class DiaryItem():
     item_id=None
@@ -22,6 +23,10 @@ class DiaryItem():
 
     def get_item_date(self):
         return self.item_date
+
+    def get_item_date_human(self):
+        humandate=HumanDate()
+        return  humandate.pretty_date( self.item_date)
 
     def set_diary_item_id(self,item_id ):
         self.item_id = item_id

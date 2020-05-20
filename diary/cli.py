@@ -2,13 +2,16 @@
 import sys
 import click
 import sys, tempfile, os
+import datetime
 from subprocess import call
 
 from  diary.db import DB
 from  diary.diary import Diary
+from diary.humandate import HumanDate
 
 # init Diary Software
 d = Diary()
+h=HumanDate()
 
 @click.group()
 @click.version_option()
@@ -53,10 +56,10 @@ def screen_today():
     d.set_date("")
     item = d.get_diary()
     if item.item_content == "":
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo(item.get_item_content())
 
 
@@ -70,10 +73,10 @@ def screen_nextday():
     d.set_day(1)
     item = d.get_diary()
     if item.item_content == "":
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo(item.get_item_content())
 
 
@@ -87,10 +90,10 @@ def screen_prevday():
     d.set_day(-1)
     item = d.get_diary()
     if item.item_content == "":
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo(item.get_item_content())
 
 @main.command("prev")
@@ -148,12 +151,10 @@ def screen_setdate(date):
     d.set_date(date)
     item = d.get_diary()
     if item.item_content == "":
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
-        click.echo("Or change the date using 'diary setdate' command and try again!")
-        click.echo("For more details check 'diary setdate --help' and 'diary show --help' ")
     else:
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo(item.get_item_content())
 
 
@@ -191,10 +192,8 @@ def screen_showdiary():
     if item.item_content=="":
         click.echo(item.get_item_date())
         click.echo("Nothing is added. Add Something using 'diary add' command")
-        click.echo("Or change the date using 'diary setdate' command and try again!")
-        click.echo("For more details check 'diary setdate --help' and 'diary show --help' ")
     else:
-        click.echo(item.get_item_date())
+        click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo( item.get_item_content())
 
 
