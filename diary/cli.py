@@ -206,7 +206,7 @@ def screen_add(content):
         with tempfile.NamedTemporaryFile(suffix=".tmp") as tf:
             tf.write(initial_message)
             tf.flush()
-            call([EDITOR, tf.name])
+            call([EDITOR,"-I", tf.name])
 
             # do the parsing with `tf` using regular File operations.
             # for instance:
