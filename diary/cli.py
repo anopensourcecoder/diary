@@ -14,11 +14,31 @@ d = Diary()
 @click.version_option()
 #@click.command()
 def main():
-    """Welcome to Diary ( console version) \n
-    Usage: diary [OPTIONS] COMMAND [ARGS]...
+    """Welcome to Diary (console version). Some example usage:
+
+
+    diary today     <- go to today diary.
+
+    diary add       <- edit diary in nano editor.
+
+    diary add "wow" <- Add text from terminal.
+
+    diary prev      <- go to previous diary
+
+    diary nextday   <- go to next day
+
+    diary first     <- go to last diary
+
+
+    ***** Also try *******
+
+    diary setdate --help
+
+    diary show  --help
+
+    https://github.com/anopensourcecoder/diary/wiki
 
     """
-    #click.echo("Enjoy!")
     return 0
 
 
@@ -214,6 +234,8 @@ def screen_add(content):
             edited_message = tf.read()
 
         item = d.add_diary(edited_message.decode("utf-8"))
+
+    click.echo("Record added. Use 'diary show' to check. ")
 
 
 
