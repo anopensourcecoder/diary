@@ -31,7 +31,7 @@ class Diary():
         try:
             go_date_obj = datetime.datetime.strptime(godate_str, self.datetime_slug_format_str)
         except:
-            go_date_obj = datetime.datetime.now()
+            go_date_obj= datetime.datetime.now().replace(hour=00, minute=00, second=00,microsecond=0)
         #print(type(self.go_date))
         #2020-05-19 08:34:36.300832
         #print("go_date_obj=", go_date_obj)
@@ -47,7 +47,7 @@ class Diary():
         try:
             current_go_date_obj = datetime.datetime.strptime(godate_str, self.datetime_slug_format_str)
         except:
-            current_go_date_obj = datetime.datetime.now()
+            current_go_date_obj = datetime.datetime.now().replace(hour=00, minute=00, second=00,microsecond=0)
 
         new_go_date_obj = current_go_date_obj +  timedelta(days=int(days))
         new_go_date_str = new_go_date_obj.strftime(self.datetime_slug_format_str)
@@ -64,7 +64,7 @@ class Diary():
             go_date_obj = datetime.datetime.strptime(diary_date_str, self.date_slug_format_str)
             go_date_str = go_date_obj.strftime(self.datetime_slug_format_str)
         except:
-            go_date_obj = datetime.datetime.now()
+            go_date_obj = datetime.datetime.now().replace(hour=00, minute=00, second=00,microsecond=0)
             go_date_str = go_date_obj.strftime(self.datetime_slug_format_str)
         #print( go_date_str )
         self.db.save_option("go_date_str", go_date_str)
