@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Diary GUI
+Comment=GUI version of Diary
+Comment[ja]=GG DD
+Exec=diary-gui
+Icon=diary-gui.png
+StartupNotify=true
+Categories=Application;Development;Other;
+Type=Application

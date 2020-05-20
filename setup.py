@@ -25,7 +25,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=7.1', ]
+requirements = ['Click>=7.1.2', 'tkcalendar>=1.6.1']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -49,11 +49,11 @@ setup(
     description="Record daily experiences and see the difference!",
     entry_points={
         'console_scripts': [
-            'diary-cli=diary.cli:main',
+            'diary=diary.cli:main',
 
         ],
         'gui_scripts': [
-            'diary-gui=diary.gui:main',
+            'gui=diary.gui:main',
         ]
     },
     install_requires=requirements,

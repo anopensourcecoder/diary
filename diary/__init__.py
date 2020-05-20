@@ -4,4 +4,7 @@ __author__ = """anopenlife"""
 __email__ = 'anopensourcecoder@gmail.com'
 __version__ = '1.0.0'
 
-__all__ = ["diary"]
+from diary.diary import Diary
+from diary.db import DB
+
+__all__ = ["DB", "Diary"]

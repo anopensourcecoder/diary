@@ -1,6 +1,7 @@
 """Gui script for diary."""
 import sys
 from tkinter import *
+from tkcalendar import Calendar, DateEntry
 import os
 
 class gui:
@@ -12,6 +13,7 @@ class gui:
         main_form.grid_rowconfigure(0, weight=1)
         main_form.grid_columnconfigure(0, weight=1)
         ROOTPATH = os.path.dirname(__file__)
+        print(ROOTPATH)
 
         main_frame = Frame(main_form)
         main_frame.grid(row=0, column=0, sticky="NEW")
