@@ -110,3 +110,25 @@ class DB():
             return row[2]
         except:
             return None
+
+    def get_previous_item_date_obj(self,current_diary_date_obj,datetime_slug_format_str):
+        current_diary_date_str = current_diary_date_obj.strftime(datetime_slug_format_str)
+
+        query = "SELECT item_id, item_content, item_datetime as '[timestamp]' FROM items WHERE item_datetime < date('" + current_diary_date_str + "') ORDER BY item_datetime DESC LIMIT 1"
+        try:
+            self.cur.execute(query)
+            row = self.cur.fetchone()
+            return row[2]
+        except:
+            return None
+
+    def get_next_item_date_obj(self,current_diary_date_obj,datetime_slug_format_str):
+        current_diary_date_str = current_diary_date_obj.strftime(datetime_slug_format_str)
+
+        query = "SELECT item_id, item_content, item_datetime as '[timestamp]' FROM items WHERE item_datetime > date('" + current_diary_date_str + "') ORDER BY item_datetime ASC LIMIT 1"
+        try:
+            self.cur.execute(query)
+            row = self.cur.fetchone()
+            return row[2]
+        except:
+            return None

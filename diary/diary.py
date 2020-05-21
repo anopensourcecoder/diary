@@ -17,6 +17,7 @@ class Diary():
     homedir = os.path.expanduser("~")
     date_slug_format_str = '%Y-%m-%d'
     datetime_slug_format_str = '%Y-%m-%d 00:00:00'
+    datetime_max_format_max_str = '%Y-%m-%d 23:59:59'
 
     def __init__(self):
         self.db = DB(self.homedir,self.db_name)
@@ -100,6 +101,32 @@ class Diary():
             self.db.save_option("go_date_str", go_date_str)
             self.get_date()
 
+    def go_previous_diary(self):
+        """ set the date to previous existing diary date."""
+        current_diary_date_obj =  self.go_date
+        previous_diary_date_obj = self.db.get_previous_item_date_obj(current_diary_date_obj,self. datetime_slug_format_str)
+        if previous_diary_date_obj is not None:
+            go_date_str = previous_diary_date_obj.strftime(self.datetime_slug_format_str)
+            self.db.save_option("go_date_str", go_date_str)
+            self.get_date()
+            return True
+        else:
+            return None
+
+    def go_next_diary(self):
+        """ set the date to previous existing diary date."""
+        current_diary_date_obj =  self.go_date + datetime.timedelta(days=1)
+        next_diary_date_obj = self.db.get_next_item_date_obj(current_diary_date_obj,self. datetime_slug_format_str)
+
+        if next_diary_date_obj is not None:
+            print("next_diary_date_obj = ", next_diary_date_obj)
+            go_date_str = next_diary_date_obj.strftime(self.datetime_slug_format_str)
+            self.db.save_option("go_date_str", go_date_str)
+            self.get_date()
+            return True
+        else:
+            return None
+
     def get_diary(self):
 
         diary_item=DiaryItem(self.db,self.go_date)
@@ -127,11 +154,13 @@ class Diary():
             'homedir': self.homedir,
             'db_name': self.db_name,
             'go_date': self.go_date,
-            'db': self.db,
         }
 
     def __str__(self):
-        print( "str" )
+        print("appdir: \t" + str(self.appdir))
+        print("homedir: \t" + str(self.homedir))
+        print("db_name: \t" + str(self.db_name))
+        print("go_date: \t" + str(self.go_date))
 
 
 

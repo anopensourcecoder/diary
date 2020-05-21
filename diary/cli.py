@@ -55,7 +55,7 @@ def screen_today():
        """
     d.set_date("")
     item = d.get_diary()
-    if item.item_content == "":
+    if not item.item_content:
         click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
@@ -72,7 +72,7 @@ def screen_nextday():
        """
     d.set_day(1)
     item = d.get_diary()
-    if item.item_content == "":
+    if not item.item_content:
         click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
@@ -89,7 +89,7 @@ def screen_prevday():
        """
     d.set_day(-1)
     item = d.get_diary()
-    if item.item_content == "":
+    if not item.item_content:
         click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
@@ -97,23 +97,38 @@ def screen_prevday():
         click.echo(item.get_item_content())
 
 @main.command("prev")
-def screen_before():
+def screen_prev():
     """set date to previous existing diary and display the content
 
         \b
-        Example : diary before
+        Example : diary prev
        """
-    click.echo("@todo")
+    result = d.go_previous_diary()
+    item = d.get_diary()
+    if result:
+        click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
+        click.echo(item.get_item_content())
+    else:
+        click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
+        click.echo( "There is not any older diary!")
+
 
 
 @main.command("next")
-def screen_after():
+def screen_next():
     """set date to next existing diary and display the content
 
         \b
-        Example : diary today
+        Example : diary next
        """
-    click.echo("@todo")
+    result = d.go_next_diary()
+    item = d.get_diary()
+    if result:
+        click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
+        click.echo(item.get_item_content())
+    else:
+        click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
+        click.echo("There is not any newer diary!")
 
 @main.command("first")
 def screen_first():
@@ -123,7 +138,7 @@ def screen_first():
        """
     d.go_first_diary()
     item = d.get_diary()
-    if item.item_content == "":
+    if not item.item_content:
         click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
@@ -138,7 +153,7 @@ def screen_last():
        """
     d.go_last_diary()
     item = d.get_diary()
-    if item.item_content == "":
+    if not item.item_content:
         click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
@@ -162,7 +177,7 @@ def screen_setdate(date):
        """
     d.set_date(date)
     item = d.get_diary()
-    if item.item_content == "":
+    if not item.item_content:
         click.echo( str( item.get_item_date().date() ) + " ( " + h.pretty_date( item.get_item_date() ) + " ) ")
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
@@ -184,11 +199,11 @@ def screen_dateshow(date):
         Example : diary set --date 2020-05-19
 
        """
-    item = d.get_date()
-    if item is not None:
-        click.echo(str(item))
+    item_date = d.get_date()
+    if item_date is not None:
+        click.echo(str(item_date.date()) + " ( " + h.pretty_date(item_date) + " ) ")
     else:
-        click.echo("Nothing." )
+        click.echo("Something went wrong!." )
 
 
 
@@ -201,7 +216,7 @@ def screen_showdiary():
 
        """
     item = d.get_diary()
-    if item.item_content=="":
+    if not item.item_content:
         click.echo(item.get_item_date())
         click.echo("Nothing is added. Add Something using 'diary add' command")
     else:
