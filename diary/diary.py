@@ -59,6 +59,7 @@ class Diary():
 
 
 
+
     def set_date(self,diary_date_str):
 
         try:
@@ -83,6 +84,21 @@ class Diary():
 
         #self.get_date()
 
+    def go_first_diary(self):
+        """ set the date to first diary date."""
+        first_diary_date_obj = self.db.get_first_item_date_obj()
+        if first_diary_date_obj is not None:
+            go_date_str = first_diary_date_obj.strftime(self.datetime_slug_format_str)
+            self.db.save_option("go_date_str", go_date_str)
+            self.get_date()
+
+    def go_last_diary(self):
+        """ set the date to last diary date."""
+        last_diary_date_obj = self.db.get_last_item_date_obj()
+        if last_diary_date_obj is not None:
+            go_date_str = last_diary_date_obj.strftime(self.datetime_slug_format_str)
+            self.db.save_option("go_date_str", go_date_str)
+            self.get_date()
 
     def get_diary(self):
 

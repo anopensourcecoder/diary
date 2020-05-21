@@ -119,19 +119,31 @@ def screen_after():
 def screen_first():
     """set date to first diary  and display the  content
 
-        \b
-        Example : diary today
+        Example : diary first
        """
-    click.echo("@todo")
+    d.go_first_diary()
+    item = d.get_diary()
+    if item.item_content == "":
+        click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
+        click.echo("Nothing is added. Add Something using 'diary add' command")
+    else:
+        click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
+        click.echo(item.get_item_content())
 
 @main.command("last")
 def screen_last():
     """set date to last diary and display the content
 
-        \b
         Example : diary last
        """
-    click.echo("@todo")
+    d.go_last_diary()
+    item = d.get_diary()
+    if item.item_content == "":
+        click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
+        click.echo("Nothing is added. Add Something using 'diary add' command")
+    else:
+        click.echo(str(item.get_item_date().date()) + " ( " + h.pretty_date(item.get_item_date()) + " ) ")
+        click.echo(item.get_item_content())
 
 
 
