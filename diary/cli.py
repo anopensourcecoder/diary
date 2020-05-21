@@ -5,6 +5,7 @@ import sys, tempfile, os
 import datetime
 from subprocess import call
 
+from . import __version__
 from  diary.db import DB
 from  diary.diary import Diary
 from diary.humandate import HumanDate
