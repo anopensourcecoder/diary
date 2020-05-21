@@ -63,6 +63,9 @@ setup(
     keywords='diary',
     name='diary',
     packages=find_packages(include=['diary', 'diary.*']),
+    package_data = {
+        'diary': ['*.png'],
+    },
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
