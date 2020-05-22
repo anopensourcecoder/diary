@@ -60,6 +60,16 @@ class Diary():
 
 
 
+    def set_datetime(self,diary_datetime):
+
+
+        go_date_obj = diary_datetime.replace(hour=00, minute=00, second=00,microsecond=0)
+        go_date_str = go_date_obj.strftime(self.datetime_slug_format_str)
+        #print( go_date_str )
+        self.db.save_option("go_date_str", go_date_str)
+
+        return self.get_date()
+
 
     def set_date(self,diary_date_str):
 
@@ -84,6 +94,14 @@ class Diary():
         #self.go_date = diary_date_obj
 
         #self.get_date()
+
+    def go_random_entry(self):
+        """ set the date to first diary date."""
+        random_entry_date_obj = self.db.get_random_entry_date_obj()
+        if random_entry_date_obj is not None:
+            go_date_str = random_entry_date_obj.strftime(self.datetime_slug_format_str)
+            self.db.save_option("go_date_str", go_date_str)
+            self.get_date()
 
     def go_first_diary(self):
         """ set the date to first diary date."""
@@ -119,7 +137,6 @@ class Diary():
         next_diary_date_obj = self.db.get_next_item_date_obj(current_diary_date_obj,self. datetime_slug_format_str)
 
         if next_diary_date_obj is not None:
-            print("next_diary_date_obj = ", next_diary_date_obj)
             go_date_str = next_diary_date_obj.strftime(self.datetime_slug_format_str)
             self.db.save_option("go_date_str", go_date_str)
             self.get_date()

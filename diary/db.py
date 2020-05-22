@@ -92,6 +92,14 @@ class DB():
         self.cur.execute("UPDATE items SET item_content=? WHERE item_id=?", (item_content,item_id))
         self.conn.commit()
 
+    def get_random_entry_date_obj(self):
+        query = "SELECT item_id, item_content, item_datetime as '[timestamp]' FROM items  ORDER BY random()  LIMIT 1"
+        try:
+            self.cur.execute(query)
+            row = self.cur.fetchone()
+            return row[2]
+        except:
+            return None
 
     def get_first_item_date_obj(self):
         query = "SELECT item_id, item_content, item_datetime as '[timestamp]' FROM items  ORDER BY item_datetime ASC LIMIT 1"
