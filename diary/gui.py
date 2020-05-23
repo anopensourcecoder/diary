@@ -31,16 +31,16 @@ class gui:
         main_form.grid_columnconfigure(0, weight=1)
         ROOTPATH = os.path.dirname(__file__)
 
-        font_cal = "Arial 17"
-        font_gui = "Arial 11"
-        font_menu = "Arial 13"
-        font_header_title = "Arial 20"
-        font_header = "Arial 15"
-        font_label_input = "Arial 10"
-        font_input = "Arial 16"
+        font_cal = "Dejavu 17"
+        font_gui = "Dejavu 11"
+        font_menu = "Dejavu 13"
+        font_header_title = "Dejavu 20"
+        font_header = "Dejavu 15"
+        font_label_input = "Dejavu 10"
+        font_input = "Dejavu 16"
         width_input = 7
-        font_submit = "Arial 11"
-        font_result = "Arial 16"
+        font_submit = "Dejavu 11"
+        font_result = "Dejavu 16"
 
 
 
