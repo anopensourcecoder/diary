@@ -165,6 +165,7 @@ class Diary():
 
 
 
+
     def __repr__(self):
         return {
             'appdir': self.appdir,

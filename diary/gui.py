@@ -20,6 +20,8 @@ class gui:
     date_picker_pattern = "y mm dd"  # used to display the date at date piker.
     date_picker_format_str = '%Y %m %d'  # used at date function to convert datepiker selected date.
     width_go_buttons = 4
+
+
     def __init__(self, main_form):
         d = Diary()
         h = HumanDate()
@@ -31,16 +33,20 @@ class gui:
         main_form.grid_columnconfigure(0, weight=1)
         ROOTPATH = os.path.dirname(__file__)
 
-        font_cal = "Dejavu 17"
-        font_gui = "Dejavu 11"
+        font_cal = "Dejavu 20"
+        font_gui = "Dejavu 13"
         font_menu = "Dejavu 13"
         font_header_title = "Dejavu 20"
         font_header = "Dejavu 15"
         font_label_input = "Dejavu 10"
         font_input = "Dejavu 16"
         width_input = 7
+        wide_scrollbar=20
+        height_nav = 32
         font_submit = "Dejavu 11"
         font_result = "Dejavu 16"
+
+
 
 
 
@@ -107,44 +113,71 @@ class gui:
 
         # import datetime
         #today = datetime.date.today()
+
+        ROOT_DIR = os.path.dirname(__file__)
+        self.logo = PhotoImage(file=ROOT_DIR + '/logo32.png')
+        self.gui_header_logo = Button(self.nav_frame, width=32, height=height_nav,
+                                      text="", image=self.logo, compound=LEFT, command=self.logo_command)
+        self.gui_header_logo.grid(row=0, column=0, sticky="N")
+
         self.date_picker_var = StringVar()
         self.cal = DateEntry(self.nav_frame, font=font_cal, date_pattern=self.date_picker_pattern,
                              textvariable=self.date_picker_var,
                              selectmode='day', cursor="hand1", width=10)
-        self.cal.grid(row=0, column=0, sticky="N")
+        self.cal.grid(row=0, column=1, sticky="N", padx=5 )
 
-        self.emptylabel = Label(self.nav_frame )
-        self.emptylabel.grid(row=0, column=1, sticky="N", padx=10)
+        self.empty_label = Label(self.nav_frame )
+        self.empty_label.grid(row=0, column=2, sticky="N", padx=0)
 
-        self.button_first = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text="<<<", command=self.first_entry)
-        self.button_first.grid(row=0, column=2, sticky="N")
+        self.first_entry_button = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text="<<<", command=self.first_entry)
+        self.first_entry_button.grid(row=0, column=3, sticky="N")
 
-        self.button_preview = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text="<<", command=self.prev_entry)
-        self.button_preview.grid(row=0, column=3, sticky="N")
+        self.prev_entry_button = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text="<<", command=self.prev_entry)
+        self.prev_entry_button.grid(row=0, column=4, sticky="N")
 
-        self.button_preview = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text=" < ", command=self.prev_day)
-        self.button_preview.grid(row=0, column=4, sticky="N")
+        self.prev_day_button = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text=" < ", command=self.prev_day)
+        self.prev_day_button.grid(row=0, column=5, sticky="N")
 
-        self.button_today = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text="<>", command=self.today_entry)
-        self.button_today.grid(row=0, column=5, sticky="N")
+        self.today_entry_button = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text="<>", command=self.today_entry)
+        self.today_entry_button.grid(row=0, column=6, sticky="N")
 
-        self.button_next = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text=" >", command=self.next_day)
-        self.button_next.grid(row=0, column=6, sticky="N")
+        self.next_day_button = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text=" >", command=self.next_day)
+        self.next_day_button.grid(row=0, column=7, sticky="N")
 
-        self.button_next = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text=">>", command=self.next_entry)
-        self.button_next.grid(row=0, column=7, sticky="N")
+        self.next_entry_button = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text=">>", command=self.next_entry)
+        self.next_entry_button.grid(row=0, column=8, sticky="N")
 
-        self.button_last = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text=">>>", command=self.last_diary)
-        self.button_last.grid(row=0, column=8, sticky="N")
+        self.last_diary_button = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text=">>>", command=self.last_diary)
+        self.last_diary_button.grid(row=0, column=9, sticky="N")
 
-        self.editor_frame = Frame(main_frame)
+        self.button_save = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons, text="Save",
+                                  command=self.save_entry)
+        self.button_save.grid(row=0, column=10, sticky="N")
+
+        self.editor_frame = Frame(main_frame,)
         self.editor_frame.grid(row=2, column=0, sticky="N")
 
-        self.diary_editor = Text(self.editor_frame, font=font_gui, width="74", height="10")
-        self.diary_editor.grid()
+        self.diary_editor_scroll = Scrollbar(self.editor_frame,width=wide_scrollbar )
+        self.diary_editor = Text(self.editor_frame, font=font_gui,    yscrollcommand=self.diary_editor_scroll.set )
+
+        # Configure the scrollbars
+        self.diary_editor_scroll.config(command=self.diary_editor.yview)
+
+        self.diary_editor.grid(row=0, column=0, sticky="NWSE")
+        self.diary_editor_scroll.grid(row=0, column=1, sticky="NWSE")
+
+
+
+        #self.diary_editor.bind('<Return>', (lambda _: self.editor_callback(self.diary_editor)))
+
+        self.diary_editor.bind('<Key>', self.editor_callback )
+        #self.diary_editor.bind('<FocusOut>', (lambda _: self.save_entry()))
+        #self.diary_editor.bind('<FocusIn>', (lambda _: self.editor_callback(self.diary_editor)))
 
         # self.diary_editor.bind('<Return>', self.onModification)
         # self.diary_editor.bind('<Button-1>', self.func1)
+
+
 
         # button = Button(root, text="Click me")
         # button.grid()
@@ -157,9 +190,21 @@ class gui:
 
         #main_form.protocol("WM_DELETE_WINDOW", lambda arg1=main_form: self.quit_sofware(arg1))
 
+    def editor_callback(self,event):
+        #print(self.diary_editor.get('1.0', 'end-1c'))
+        try:
+            if event.char:
+                self.button_save["state"] = "active"
+        except:
+            pass
 
+    def save_entry(self):
+        entry = self.diary_editor.get('1.0', 'end-1c')
+        d.add_diary(entry)
+        self.button_save["state"] = "disabled"
 
     def first_entry(self):
+
         d.go_first_diary()
         entry = d.get_diary()
         entry_datetime = entry.get_item_date()
@@ -167,6 +212,7 @@ class gui:
         self.date_picker_var.set(today_date_str)
 
     def prev_entry(self):
+
         result = d.go_previous_diary()
         entry = d.get_diary()
         entry_datetime = entry.get_item_date()
@@ -174,6 +220,8 @@ class gui:
         self.date_picker_var.set(today_date_str)
 
     def prev_day(self):
+
+
         d.set_day(-1)
         entry = d.get_diary()
         entry_datetime = entry.get_item_date()
@@ -182,6 +230,7 @@ class gui:
 
     def today_entry(self):
 
+
         d.set_date("")
         entry = d.get_diary()
         entry_datetime =  entry.get_item_date()
@@ -189,6 +238,7 @@ class gui:
         self.date_picker_var.set(today_date_str)
 
     def next_day(self):
+
         d.set_day(1)
         entry = d.get_diary()
         entry_datetime = entry.get_item_date()
@@ -196,6 +246,8 @@ class gui:
         self.date_picker_var.set(today_date_str)
 
     def next_entry(self):
+
+
         result = d.go_next_diary()
         entry = d.get_diary()
         entry_datetime = entry.get_item_date()
@@ -204,6 +256,7 @@ class gui:
 
 
     def last_diary(self):
+
         d.go_last_diary()
         entry = d.get_diary()
         entry_datetime = entry.get_item_date()
@@ -229,6 +282,7 @@ class gui:
             if entry.item_content:
                 self.diary_editor.insert('1.0', entry.get_item_content())
                 self.diary_editor_before = self.diary_editor.get('1.0', 'end-1c')
+                self.button_save["state"] = "disabled"
 
         except:
             pass
