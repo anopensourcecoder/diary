@@ -19,49 +19,42 @@ class gui:
 
     date_picker_pattern = "y mm dd"  # used to display the date at date piker.
     date_picker_format_str = '%Y %m %d'  # used at date function to convert datepiker selected date.
-    width_go_buttons = 4
 
 
-    def __init__(self, main_form):
+
+    def __init__(self, root):
         d = Diary()
         h = HumanDate()
 
-        main_form.title("Diary GUI")
-        main_form.geometry("800x600")
-        main_form.minsize(800, 600)
-        main_form.grid_rowconfigure(0, weight=1)
-        main_form.grid_columnconfigure(0, weight=1)
+        root.title("Diary GUI")
+        #root.geometry("960x600")
+        root.minsize(960, 600)
+        #root.config( background="#000000")
+        root.grid_rowconfigure(0, weight=1)
+        root.grid_columnconfigure(0, weight=1)
         ROOTPATH = os.path.dirname(__file__)
 
-        font_cal = "Dejavu 20"
-        font_gui = "Dejavu 13"
+        font_cal = "Dejavu 18"
+        font_gui = "Dejavu 12"
         font_menu = "Dejavu 13"
         font_header_title = "Dejavu 20"
         font_header = "Dejavu 15"
         font_label_input = "Dejavu 10"
         font_input = "Dejavu 16"
+        width_go_buttons = 4
         width_input = 7
         wide_scrollbar=20
         height_nav = 32
+
         font_submit = "Dejavu 11"
         font_result = "Dejavu 16"
 
 
 
 
-
-        main_frame = Frame(main_form)
-        main_frame.grid(row=0, column=0, sticky="NEW")
-        main_frame.grid_rowconfigure(0, weight=1)
-        main_frame.grid_columnconfigure(0, weight=1)
-
-        main_form.grid_rowconfigure(0, weight=1)
-        main_form.grid_columnconfigure(0, weight=1)
-
         # menu
-        menu_bar = Menu(main_form)
-        main_form.config(menu=menu_bar)
-        main_form.config(menu=menu_bar)
+        menu_bar = Menu(root )
+        root.config(menu=menu_bar)
 
         home_menu = Menu(menu_bar, tearoff=0)
         home_menu.add_command(font=font_menu, label="About",command=self.about_command)
@@ -71,7 +64,7 @@ class gui:
         #home_menu.add_command(font=font_gui, label="Export")
         home_menu.add_separator()
         home_menu.add_command(font=font_menu, label="Exit", underline=1, accelerator='Alt-X',
-                                   command=lambda arg1=main_form: self.quit(arg1))
+                                   command=lambda arg1=root: self.quit(arg1))
 
         menu_bar.add_cascade(font=font_gui, label="Home", menu=home_menu)
         menu_bar.bind_all("<Alt-x>", self.quit )
@@ -107,64 +100,106 @@ class gui:
 
         #menu_bar.add_cascade(font=font_gui, label="Edit", menu=edit_menu)
 
-        self.nav_frame = Frame(main_frame)
-        self.nav_frame.grid(row=0, column=0, sticky="N")
-        self.nav_frame.configure(padx=0, pady=5)
+        self.main_frame = Frame(root)
+        #self.main_frame.configure(background="#ff0000")
+        self.main_frame.grid(row=0, column=0, sticky="NSEW")
+        self.main_frame.grid_columnconfigure(0, weight=1 )
+        self.main_frame.grid_columnconfigure(1, weight=0  )
+        self.main_frame.grid_columnconfigure(2, weight=1)
+        self.main_frame.grid_rowconfigure(0, weight=1)
 
-        # import datetime
-        #today = datetime.date.today()
+
+        self.container = Frame(self.main_frame )
+        #self.main_frame.configure(background="#aabbaa")
+        self.container.grid(row=0, column=0, sticky="NEWS")
+        self.container.grid(row=0, column=1, sticky="NEWS")
+        self.container.configure(padx=0, pady=5)
+
+        self.header_frame = Frame(self.container)
+        self.header_frame.grid(row=0, column=0, sticky="WE")
+        self.header_frame.configure(pady=0)
+
+
+
+        self.header_left_frame = Frame(self.header_frame )
+        self.header_frame.grid_columnconfigure(0, weight=1, minsize=100)
+        self.header_left_frame.grid(row=0, column=0,sticky="W")
+
+
+        self.header_right_frame = Frame(self.header_frame)
+        self.header_frame.grid_columnconfigure(0, weight=1, minsize=100)
+        self.header_left_frame.grid(row=0, column=0)
+        self.header_right_frame.grid(row=0, column=1, sticky="E")
+
 
         ROOT_DIR = os.path.dirname(__file__)
         self.logo = PhotoImage(file=ROOT_DIR + '/logo32.png')
-        self.gui_header_logo = Button(self.nav_frame, width=32, height=height_nav,
+        self.gui_header_logo = Button(self.header_left_frame, width=32, height=height_nav,
                                       text="", image=self.logo, compound=LEFT, command=self.logo_command)
-        self.gui_header_logo.grid(row=0, column=0, sticky="N")
+        self.gui_header_logo.grid(row=0, column=0, sticky="NWSE")
 
         self.date_picker_var = StringVar()
-        self.cal = DateEntry(self.nav_frame, font=font_cal, date_pattern=self.date_picker_pattern,
+        self.cal = DateEntry(self.header_left_frame, font=font_cal, date_pattern=self.date_picker_pattern,
                              textvariable=self.date_picker_var,
                              selectmode='day', cursor="hand1", width=10)
-        self.cal.grid(row=0, column=1, sticky="N", padx=5 )
+        self.cal.grid(row=0, column=1, sticky="WE", padx=8 )
 
-        self.empty_label = Label(self.nav_frame )
-        self.empty_label.grid(row=0, column=2, sticky="N", padx=0)
+        self.empty_label = Label(self.header_left_frame )
+        self.empty_label.grid(row=0, column=2, sticky="NWSE", padx=0)
 
-        self.first_entry_button = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text="<<<", command=self.first_entry)
-        self.first_entry_button.grid(row=0, column=3, sticky="N")
+        self.first_entry_button = Button(self.header_right_frame, font=font_gui, width=width_go_buttons , text="<<<", command=self.first_entry)
+        self.first_entry_button.grid(row=0, column=3, sticky="NWSE")
 
-        self.prev_entry_button = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text="<<", command=self.prev_entry)
-        self.prev_entry_button.grid(row=0, column=4, sticky="N")
+        self.prev_entry_button = Button(self.header_right_frame, font=font_gui, width=width_go_buttons , text="<<", command=self.prev_entry)
+        self.prev_entry_button.grid(row=0, column=4, sticky="NWSE")
 
-        self.prev_day_button = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text=" < ", command=self.prev_day)
-        self.prev_day_button.grid(row=0, column=5, sticky="N")
+        self.prev_day_button = Button(self.header_right_frame, font=font_gui, width=width_go_buttons , text=" < ", command=self.prev_day)
+        self.prev_day_button.grid(row=0, column=5, sticky="NWSE")
 
-        self.today_entry_button = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text="<>", command=self.today_entry)
-        self.today_entry_button.grid(row=0, column=6, sticky="N")
+        self.today_entry_button = Button(self.header_right_frame, font=font_gui,width=width_go_buttons , text="<>", command=self.today_entry)
+        self.today_entry_button.grid(row=0, column=6, sticky="NWSE")
 
-        self.next_day_button = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text=" >", command=self.next_day)
-        self.next_day_button.grid(row=0, column=7, sticky="N")
+        self.next_day_button = Button(self.header_right_frame, font=font_gui,width=width_go_buttons , text=" >", command=self.next_day)
+        self.next_day_button.grid(row=0, column=7, sticky="NWSE")
 
-        self.next_entry_button = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons , text=">>", command=self.next_entry)
-        self.next_entry_button.grid(row=0, column=8, sticky="N")
+        self.next_entry_button = Button(self.header_right_frame, font=font_gui, width=width_go_buttons , text=">>", command=self.next_entry)
+        self.next_entry_button.grid(row=0, column=8, sticky="NWSE")
 
-        self.last_diary_button = Button(self.nav_frame, font=font_gui,width=self.width_go_buttons , text=">>>", command=self.last_diary)
-        self.last_diary_button.grid(row=0, column=9, sticky="N")
+        self.last_diary_button = Button(self.header_right_frame, font=font_gui,width=width_go_buttons , text=">>>", command=self.last_diary)
+        self.last_diary_button.grid(row=0, column=9, sticky="NWSE")
 
-        self.button_save = Button(self.nav_frame, font=font_gui, width=self.width_go_buttons, text="Save",
+        self.button_save = Button(self.header_right_frame, font=font_gui, width=width_go_buttons, text="Save" ,
                                   command=self.save_entry)
-        self.button_save.grid(row=0, column=10, sticky="N")
+        self.button_save.grid(row=0, column=10, sticky="NWSE")
 
-        self.editor_frame = Frame(main_frame,)
-        self.editor_frame.grid(row=2, column=0, sticky="N")
 
-        self.diary_editor_scroll = Scrollbar(self.editor_frame,width=wide_scrollbar )
-        self.diary_editor = Text(self.editor_frame, font=font_gui,    yscrollcommand=self.diary_editor_scroll.set )
+        self.container.grid_rowconfigure(0, weight=0,minsize=40)
+        self.container.grid_rowconfigure(1, weight=1,minsize=100)
+        self.container.grid_columnconfigure(0,minsize = 945 )
+
+
+        self.editor_frame = Frame(self.container )
+        #self.editor_frame.configure(background="#0000ff")
+        self.editor_frame.grid(row=1,sticky="NWSE")
+        self.editor_frame.grid_columnconfigure(0, weight=1)
+        self.editor_frame.grid_rowconfigure(0, weight=1)
+        self.editor_frame.configure(padx=0, pady=5)
+
+        self.diary_editor = Text(self.editor_frame, font=font_gui, wrap=WORD )
+        self.diary_editor.grid( sticky="NWSE")
+
+
+
+        #self.diary_editor.pack(expand=True, fill='both')
+
+        #self.diary_editor_scroll = Scrollbar(self.editor_frame, width=wide_scrollbar )
+        #self.diary_editor = Text(self.editor_frame, font=font_gui, wrap=WORD,  yscrollcommand=self.diary_editor_scroll.set )
 
         # Configure the scrollbars
-        self.diary_editor_scroll.config(command=self.diary_editor.yview)
+        #self.diary_editor_scroll.config(command=self.diary_editor.yview)
 
-        self.diary_editor.grid(row=0, column=0, sticky="NWSE")
-        self.diary_editor_scroll.grid(row=0, column=1, sticky="NWSE")
+        #self.diary_editor.grid(row=0, column=0, sticky="NWES")
+        #self.diary_editor_scroll.grid(row=0, column=1, sticky="NWES")
 
 
 
