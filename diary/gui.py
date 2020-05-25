@@ -133,7 +133,7 @@ class gui:
 
 
         ROOT_DIR = os.path.dirname(__file__)
-        self.logo = PhotoImage(file=ROOT_DIR + '/logo32.png')
+        self.logo = PhotoImage(file=ROOT_DIR + '/icon32x32.png')
         self.gui_header_logo = Button(self.header_left_frame, width=32, height=height_nav,
                                       text="", image=self.logo, compound=LEFT, command=self.logo_command)
         self.gui_header_logo.grid(row=0, column=0, sticky="NWSE")
