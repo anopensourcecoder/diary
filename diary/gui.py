@@ -185,21 +185,13 @@ class gui:
         self.editor_frame.grid_rowconfigure(0, weight=1)
         self.editor_frame.configure(padx=0, pady=5)
 
-        self.diary_editor = Text(self.editor_frame, font=font_gui, wrap=WORD )
-        self.diary_editor.grid( sticky="NWSE")
+        self.diary_editor_scroll = Scrollbar(self.editor_frame, width=wide_scrollbar)
+        self.diary_editor_scroll.grid(row=0, column=1, sticky="NWES")
 
+        self.diary_editor = Text(self.editor_frame, font=font_gui, wrap=WORD,yscrollcommand=self.diary_editor_scroll.set  )
+        self.diary_editor.grid(row=0, column=0, sticky="NWES")
 
-
-        #self.diary_editor.pack(expand=True, fill='both')
-
-        #self.diary_editor_scroll = Scrollbar(self.editor_frame, width=wide_scrollbar )
-        #self.diary_editor = Text(self.editor_frame, font=font_gui, wrap=WORD,  yscrollcommand=self.diary_editor_scroll.set )
-
-        # Configure the scrollbars
-        #self.diary_editor_scroll.config(command=self.diary_editor.yview)
-
-        #self.diary_editor.grid(row=0, column=0, sticky="NWES")
-        #self.diary_editor_scroll.grid(row=0, column=1, sticky="NWES")
+        self.diary_editor_scroll.config(command=self.diary_editor.yview)
 
 
 
