@@ -1,6 +1,9 @@
 """Gui script for diary."""
 import sys
 from tkinter import *
+import tkinter as tk
+from tkinter import ttk
+
 from tkcalendar import Calendar, DateEntry
 import os
 from . import __version__
@@ -15,24 +18,29 @@ from diary.humandate import HumanDate
 d = Diary()
 h=HumanDate()
 
-class gui:
+class GUI(tk.Frame):
 
     date_picker_pattern = "y mm dd"  # used to display the date at date piker.
     date_picker_format_str = '%Y %m %d'  # used at date function to convert datepiker selected date.
 
 
 
-    def __init__(self, root):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
         d = Diary()
         h = HumanDate()
 
-        root.title("Diary GUI")
-        #root.geometry("960x600")
-        root.minsize(960, 600)
+
+        self.master.geometry("960x600")
+        self.master.minsize(960, 300)
         #root.config( background="#000000")
-        root.grid_rowconfigure(0, weight=1)
-        root.grid_columnconfigure(0, weight=1)
+        self.master.grid_rowconfigure(0, weight=1)
+        self.master.grid_columnconfigure(0, weight=1)
         ROOTPATH = os.path.dirname(__file__)
+
+        self.master.title("Diary GUI")
+        self.master.winfo_toplevel().title("Diary GUI")
 
         font_cal = "Dejavu 18"
         font_gui = "Dejavu 12"
@@ -53,8 +61,8 @@ class gui:
 
 
         # menu
-        menu_bar = Menu(root )
-        root.config(menu=menu_bar)
+        menu_bar = Menu(self.master )
+        self.master.config(menu=menu_bar)
 
         home_menu = Menu(menu_bar, tearoff=0)
         home_menu.add_command(font=font_menu, label="About",command=self.about_command)
@@ -64,7 +72,7 @@ class gui:
         #home_menu.add_command(font=font_gui, label="Export")
         home_menu.add_separator()
         home_menu.add_command(font=font_menu, label="Exit", underline=1, accelerator='Alt-X',
-                                   command=lambda arg1=root: self.quit(arg1))
+                                   command=lambda arg1=self.master: self.quit(arg1))
 
         menu_bar.add_cascade(font=font_gui, label="Home", menu=home_menu)
         menu_bar.bind_all("<Alt-x>", self.quit )
@@ -73,8 +81,8 @@ class gui:
         go_menu.add_command(font=font_gui, label="Random Entry" ,command=self.random_entry ,accelerator='Alt-r')
         menu_bar.bind_all("<Alt-r>", self.go_random_entry)
 
-        go_menu.add_command(font=font_gui, label="Today" ,command=self.today_entry ,accelerator='Alt-Up' )
-        menu_bar.bind_all("<Alt-Up>", self.go_today)
+        go_menu.add_command(font=font_gui, label="Today" ,command=self.today_entry ,accelerator='Alt-t' )
+        menu_bar.bind_all("<Alt-t>", self.go_today)
 
         go_menu.add_command(font=font_gui, label="Next Day" ,command=self.next_day , accelerator='Alt-Right' )
         menu_bar.bind_all("<Alt-Right>", self.go_next_day)
@@ -83,11 +91,15 @@ class gui:
         menu_bar.bind_all("<Alt-Left>", self.go_prev_day)
 
         go_menu.add_separator()
-        go_menu.add_command(font=font_gui, label="Next Entry" ,command=self.next_entry , accelerator='Alt-Right')
-        go_menu.add_command(font=font_gui, label="Previous Entry" ,command=self.prev_entry , accelerator='Alt-Left' )
+        go_menu.add_command(font=font_gui, label="Next Entry" ,command=self.next_entry , accelerator='Alt-n')
+        go_menu.add_command(font=font_gui, label="Previous Entry" ,command=self.prev_entry , accelerator='Alt-p' )
+        menu_bar.bind_all("<Alt-n>", self.go_next_entry)
+        menu_bar.bind_all("<Alt-p>", self.go_prev_entry)
         go_menu.add_separator()
-        go_menu.add_command(font=font_gui, label="First Entry",command=self.first_entry)
-        go_menu.add_command(font=font_gui, label="Last Entry" ,command=self.last_diary )
+        go_menu.add_command(font=font_gui, label="First Entry",command=self.first_entry, accelerator='Alt-f' )
+        go_menu.add_command(font=font_gui, label="Last Entry" ,command=self.last_diary , accelerator='Alt-l' )
+        menu_bar.bind_all("<Alt-f>", self.go_next_entry)
+        menu_bar.bind_all("<Alt-l>", self.go_prev_entry)
 
         menu_bar.add_cascade(font=font_gui, label="Go", menu=go_menu)
 
@@ -100,7 +112,7 @@ class gui:
 
         #menu_bar.add_cascade(font=font_gui, label="Edit", menu=edit_menu)
 
-        self.main_frame = Frame(root)
+        self.main_frame = Frame(self.master)
         #self.main_frame.configure(background="#ff0000")
         self.main_frame.grid(row=0, column=0, sticky="NSEW")
         self.main_frame.grid_columnconfigure(0, weight=1 )
@@ -156,7 +168,7 @@ class gui:
         self.prev_day_button = Button(self.header_right_frame, font=font_gui, width=width_go_buttons , text=" < ", command=self.prev_day)
         self.prev_day_button.grid(row=0, column=5, sticky="NWSE")
 
-        self.today_entry_button = Button(self.header_right_frame, font=font_gui,width=width_go_buttons , text="<>", command=self.today_entry)
+        self.today_entry_button = Button(self.header_right_frame, font=font_gui,width=width_go_buttons , text="Today", command=self.today_entry)
         self.today_entry_button.grid(row=0, column=6, sticky="NWSE")
 
         self.next_day_button = Button(self.header_right_frame, font=font_gui,width=width_go_buttons , text=" >", command=self.next_day)
@@ -337,6 +349,12 @@ class gui:
     def go_next_day(self, event):
         self.next_day()
 
+    def go_prev_entry(self, event):
+        self.prev_entry()
+
+    def go_next_entry(self, event):
+        self.next_entry()
+
     def go_random_entry(self, event):
         self.random_entry()
 
@@ -410,8 +428,8 @@ class gui:
         webbrowser.open_new(url)
 
 def main( ):
-    root = Tk()
-    gui(root)
+    root = tk.Tk(className='Diary')
+    gui= GUI(master=root)
     root.mainloop()
 
 if __name__ == "__main__":
